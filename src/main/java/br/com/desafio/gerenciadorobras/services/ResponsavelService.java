@@ -3,14 +3,13 @@ package br.com.desafio.gerenciadorobras.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.entities.Responsavel;
-import br.com.desafio.gerenciadorobras.repository.ResponsavelRepository;
+import br.com.desafio.gerenciadorobras.repositories.ResponsavelRepository;
 import jakarta.persistence.NoResultException;
 
 public class ResponsavelService {
@@ -29,17 +28,21 @@ public class ResponsavelService {
                         .collect(Collectors.toList());
     }
 
-    public ResponsavelDTO save(@Valid ResponsavelDTO responsavelDTO) {
+    public ResponsavelDTO save(ResponsavelDTO responsavelDTO) {
+        validaResponsavel(responsavelDTO);
         return mapper.map(responsavelRepository.save(mapper.map(responsavelDTO, Responsavel.class)), ResponsavelDTO.class);
     }
 
-    public ResponsavelDTO update(Long idObra, ResponsavelDTO responsavelDTO) {
-        Responsavel responsavel = responsavelRepository.findById(idObra).orElseThrow(NoResultException::new);
-        responsavel.setCodigo(responsavelDTO.getCodigo() != null ? responsavelDTO.getCodigo() : responsavel.getCodigo());
-        responsavel.setCpf(responsavelDTO.getCpf() != null ? responsavelDTO.getCpf() : responsavel.getCpf());
-        responsavel.setNome(responsavelDTO.getNome() != null ? responsavelDTO.getNome() : responsavel.getNome());
-        responsavelRepository.save(responsavel);
-        return mapper.map(responsavel, ResponsavelDTO.class);
+    private void validaResponsavel(ResponsavelDTO responsavelDTO) {
+        if (responsavelDTO.getId() != null) {
+            responsavelRepository.findById(responsavelDTO.getId()).orElseThrow(NoResultException::new);
+        }
+        responsavelRepository.findByCpf(responsavelDTO.getCpf()).ifPresent(r -> {
+            throw new DuplicateKeyException(String.format("CPF já cadastrado para o responsável %s", r.getNome()));
+        });
+        responsavelRepository.findByCodigo(responsavelDTO.getCodigo()).ifPresent(r -> {
+            throw new DuplicateKeyException(String.format("Código já cadastrado para o responsável %s", r.getNome()));
+        });
     }
 
     public ResponsavelDTO getResponsavel(Long responsavelId) {

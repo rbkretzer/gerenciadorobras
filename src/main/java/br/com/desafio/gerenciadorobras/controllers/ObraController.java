@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,13 +20,14 @@ import br.com.desafio.gerenciadorobras.services.ObraService;
 import jakarta.persistence.NoResultException;
 
 @RestController
-@RequestMapping("api/obra")
+@RequestMapping("api")
 public class ObraController {
 
     @Autowired
     private ObraService obraService;
 
     @GetMapping
+    @RequestMapping("/obras")
     public ResponseEntity<?> getObras(
             @RequestParam(name = "page_size", defaultValue = "10", required = false) int pageSize, 
             @RequestParam(name = "page_index", defaultValue = "0", required = false) int pageIndex,
@@ -42,25 +42,27 @@ public class ObraController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveObra(@RequestBody @Valid ObraDTO obraDTO) {
+    @RequestMapping("/obraprivada")
+    public ResponseEntity<?> saveObraPrivada(@RequestBody @Valid ObraDTO obraDTO) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(obraService.save(obraDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(obraService.save(false, obraDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
         }
     }
 
-    @PutMapping("{obraId}")
-    public ResponseEntity<?> saveObra(@PathVariable("obraId") Long obraId, @RequestBody @Valid ObraDTO obraDTO) {
+    @PostMapping
+    @RequestMapping("/obrapublica")
+    public ResponseEntity<?> saveObraPublica(@RequestBody @Valid ObraDTO obraDTO) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(obraService.save(obraDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(obraService.save(true, obraDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
         }
     }
     
-    @GetMapping("{obraId}")
-    public ResponseEntity<?> saveObra(@PathVariable("obraId") Long obraId) {
+    @GetMapping("/obra/{obraId}")
+    public ResponseEntity<?> getObra(@PathVariable("obraId") Long obraId) {
         try {
             return ResponseEntity.ok(obraService.getObra(obraId));
         } catch (NoResultException nre) {
@@ -70,7 +72,7 @@ public class ObraController {
         }
     }
     
-    @DeleteMapping("{obraId}")
+    @DeleteMapping("/obra/{obraId}")
     public ResponseEntity<?> deleteObra(@PathVariable("obraId") Long obraId) {
         try {
             return ResponseEntity.ok(obraService.deleteObra(obraId));

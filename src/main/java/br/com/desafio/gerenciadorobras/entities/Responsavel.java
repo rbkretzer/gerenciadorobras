@@ -12,22 +12,22 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "RESPONSAVEIS")
+@Table(name = "responsaveis")
 @NoArgsConstructor @AllArgsConstructor
 public class Responsavel {
     
     @Id
-    @Column(name = "ID_RESPONSAVEL")
+    @Column(name = "id_responsavel")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "CD_RESPONSAVEL", length = 30)
+    @Column(name = "cd_responsavel", length = 30)
     private String codigo;
 
-    @Column(name = "CPF", length = 14)
+    @Column(name = "cpf", length = 14)
     private String cpf;
 
-    @Column(name = "NM_RESPONSAVEL", length = 100)
+    @Column(name = "nm_responsavel", length = 100)
     private String nome;
 
 }

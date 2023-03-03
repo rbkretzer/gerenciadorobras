@@ -3,7 +3,6 @@ package br.com.desafio.gerenciadorobras.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,21 +15,21 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "OBRA_RESPONSAVEIS")
+@Table(name = "obra_responsaveis")
 @NoArgsConstructor @AllArgsConstructor
 public class ObraResponsavel {
     
     @Id
-    @Column(name = "ID_OBRA_RESPONSAVEL")
+    @Column(name = "id_obra_responsavel")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "ID_OBRA", nullable = false, foreignKey = @ForeignKey(name = "FK_OBRA_RESPONSAVEL_OBRA"))
+    @JoinColumn(name= "id_obra", nullable = false)
     private Obra obra;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_RESPONSAVEL", nullable = false, foreignKey = @ForeignKey(name = "FK_OBRA_RESPONSAVEL_RESPONSAVEL"))
+    @JoinColumn(name = "id_responsavel", nullable = false)
     private Responsavel responsavel;
 
 }

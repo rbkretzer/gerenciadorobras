@@ -1,4 +1,4 @@
-package br.com.desafio.gerenciadorobras.repository;
+package br.com.desafio.gerenciadorobras.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +19,13 @@ public interface ObraRepository extends JpaRepository<Obra, Long> {
                  + "    INNER JOIN responsavei r                                                                            " 
                  + "        ON r.id_responsavel = or.id_responsavel                                                         "
                  + "WHERE o.tipo_obra = COALESCE(CAST(CAST(:tipoObra AS TEXT) AS INTEGER), o.tipo_obra)                     "
-                 + "    AND r.id_responsavel = COALESCE(CAST(CAST(:idResponsavel AS TEXT) AS INTEGER), r.id_responsavel)    "
+                 + "    AND r.cd_responsavel = COALESCE(CAST(:codigoResponsavel AS TEXT), r.id_responsavel)                 "
                  + "LIMIT :pageSize                                                                                         "
                  + "OFFSET (:pageSize * :pageIndex)                                                                         "
         ,nativeQuery = true
     )
     Optional<List<Obra>> getObras(@Param("tipoObra") Integer tipoObra,
-                                  @Param("idResponsavel") Long idResponsavel,
+                                  @Param("codigoResponsavel") String codigoResponsavel,
                                   @Param("pageIndex") int pageIndex,
                                   @Param("pageSize") int pageSize
     );

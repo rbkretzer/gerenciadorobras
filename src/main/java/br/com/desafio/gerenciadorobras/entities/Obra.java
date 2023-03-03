@@ -1,5 +1,7 @@
 package br.com.desafio.gerenciadorobras.entities;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.desafio.gerenciadorobras.enumerators.TipoZona;
@@ -10,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,28 +19,36 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "OBRAS")
+@Table(name = "obras")
 @NoArgsConstructor @AllArgsConstructor
-@SequenceGenerator(name = "GEN_ID_OBRA", sequenceName = "SEQ_ID_OBRA", allocationSize = 1, initialValue = 1)
 public class Obra {
     
     @Id
-    @Column(name = "ID_OBRA")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ID_OBRA")
+    @Column(name = "id_obra")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "NUM_OBRA", nullable = false, precision = 12, scale = 0)
+    @Column(name = "num_obra", nullable = false, precision = 12, scale = 0)
     private Long numero;
     
-    @Column(name = "DT_CADASTRO", nullable = false)
+    @Column(name = "dt_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
 
-    @Column(name = "DS_OBRA", nullable = false)
+    @Column(name = "ds_obra", nullable = false)
     private String descricao;
 
     @Enumerated // poderia ser adotado um converter, mas entendo que é preferivel utilizar a ordem natural do enum
-    @Column(name = "TP_ZONA", columnDefinition = "TINYINT", nullable = false)
+    @Column(name = "tp_zona", columnDefinition = "TINYINT", nullable = false)
     private TipoZona zona;
+
+    @Column(name = "dt_inicio")
+    private LocalDate dataInicio;
+    
+    @Column(name = "dt_inicio")
+    private LocalDate dataFim;
+
+    @Column(name = "vl_area_total", precision = 12, scale = 2)
+    private BigDecimal areaTotal;
 
     @PrePersist
     public void createDate() {

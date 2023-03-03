@@ -7,5 +7,5 @@ import lombok.Value;
 public class ObraFilter {
     
     private TipoZona tipoZona;
-    private Long idResponsavel;
+    private String codigoResponsavel;
 }
