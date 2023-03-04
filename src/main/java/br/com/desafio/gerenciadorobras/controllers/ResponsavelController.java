@@ -1,7 +1,5 @@
 package br.com.desafio.gerenciadorobras.controllers;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.services.ResponsavelService;
 import jakarta.persistence.NoResultException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/responsavel")

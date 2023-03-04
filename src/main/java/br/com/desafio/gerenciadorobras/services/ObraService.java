@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.validation.ValidationException;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +16,7 @@ import br.com.desafio.gerenciadorobras.filters.ObraFilter;
 import br.com.desafio.gerenciadorobras.repositories.ObraRepository;
 import br.com.desafio.gerenciadorobras.repositories.ObraResponsavelRepository;
 import jakarta.persistence.NoResultException;
+import jakarta.validation.ValidationException;
 
 public class ObraService {
 
