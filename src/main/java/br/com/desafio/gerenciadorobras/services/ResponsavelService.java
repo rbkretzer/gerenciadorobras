@@ -20,7 +20,7 @@ public class ResponsavelService {
     @Autowired
     private ModelMapper mapper;
 
-    public List<ResponsavelDTO> getResponsaveis(int pageSize, int pageIndex) {
+    public List<ResponsavelDTO> getResponsaveis(int pageSize, int pageIndex) throws NoResultException {
         return responsavelRepository.getResponsaveis(pageIndex , pageSize)
             .orElseThrow(NoResultException::new)
                 .stream()
@@ -33,7 +33,7 @@ public class ResponsavelService {
         return mapper.map(responsavelRepository.save(mapper.map(responsavelDTO, Responsavel.class)), ResponsavelDTO.class);
     }
 
-    private void validaResponsavel(ResponsavelDTO responsavelDTO) {
+    private void validaResponsavel(ResponsavelDTO responsavelDTO) throws NoResultException, DuplicateKeyException {
         if (responsavelDTO.getId() != null) {
             responsavelRepository.findById(responsavelDTO.getId()).orElseThrow(NoResultException::new);
         }
@@ -47,5 +47,9 @@ public class ResponsavelService {
 
     public ResponsavelDTO getResponsavel(Long responsavelId) {
         return mapper.map(responsavelRepository.findById(responsavelId).orElseThrow(NoResultException::new), ResponsavelDTO.class);
+    }
+
+    public Responsavel findOrThrow(Long responsavelId) throws NoResultException {
+        return responsavelRepository.findById(responsavelId).orElseThrow(() ->  new NoResultException(String.format("Responsável com id %s não encontrado", responsavelId)));
     }
 }
