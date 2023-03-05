@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.services.ResponsavelService;
-import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/responsavel")
+@RequestMapping("/api/v1/responsavel")
 public class ResponsavelController {
     
     @Autowired
@@ -28,43 +27,21 @@ public class ResponsavelController {
     public ResponseEntity<?> getResponsaveis(
             @RequestParam(name = "page_size", defaultValue = "10", required = false) int pageSize, 
             @RequestParam(name = "page_index", defaultValue = "0", required = false) int pageIndex) {
-        try {
-            return ResponseEntity.ok(responsavelService.getResponsaveis(pageSize, pageIndex));
-        } catch (NoResultException nre) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Não existem registros");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
-        }
+        return ResponseEntity.ok(responsavelService.getResponsaveis(pageSize, pageIndex));
     }
 
     @PostMapping
     public ResponseEntity<?> saveResponsavel(@RequestBody @Valid ResponsavelDTO responsavelDTO) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(responsavelService.save(responsavelDTO));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(responsavelService.save(responsavelDTO));
     }
     
     @GetMapping("{responsavelId}")
     public ResponseEntity<?> getResponsavel(@PathVariable("responsavelId") Long responsavelId) {
-        try {
-            return ResponseEntity.ok(responsavelService.getResponsavel(responsavelId));
-        } catch (NoResultException nre) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Responsavel não encontrada");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
-        }
+        return ResponseEntity.ok(responsavelService.getResponsavel(responsavelId));
     }
     
     @DeleteMapping("{responsavelId}")
     public ResponseEntity<?> deleteResponsavel(@PathVariable("responsavelId") Long responsavelId) {
-        try {
-            return ResponseEntity.ok(responsavelService.getResponsavel(responsavelId));
-        } catch (NoResultException nre) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Responsavel não encontrada");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
-        }
+        return ResponseEntity.ok(responsavelService.deleteResponsavel(responsavelId));
     }
 }

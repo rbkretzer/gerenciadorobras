@@ -37,7 +37,7 @@ public class ResponsavelService {
 
     private void validaResponsavel(ResponsavelDTO responsavelDTO) throws NoResultException, DuplicateKeyException {
         if (responsavelDTO.getId() != null) {
-            responsavelRepository.findById(responsavelDTO.getId()).orElseThrow(NoResultException::new);
+            findOrThrow(responsavelDTO.getId());
         }
         responsavelRepository.findByCpf(responsavelDTO.getCpf()).ifPresent(r -> {
             throw new DuplicateKeyException(String.format("CPF já cadastrado para o responsável %s", r.getNome()));
@@ -48,10 +48,15 @@ public class ResponsavelService {
     }
 
     public ResponsavelDTO getResponsavel(Long responsavelId) {
-        return mapper.map(responsavelRepository.findById(responsavelId).orElseThrow(NoResultException::new), ResponsavelDTO.class);
+        return mapper.map(findOrThrow(responsavelId), ResponsavelDTO.class);
     }
 
     public Responsavel findOrThrow(Long responsavelId) throws NoResultException {
         return responsavelRepository.findById(responsavelId).orElseThrow(() ->  new NoResultException(String.format("Responsável com id %s não encontrado", responsavelId)));
+    }
+
+    public String deleteResponsavel(Long responsavelId) {
+        responsavelRepository.delete(findOrThrow(responsavelId));
+        return "Excluído com sucesso";
     }
 }

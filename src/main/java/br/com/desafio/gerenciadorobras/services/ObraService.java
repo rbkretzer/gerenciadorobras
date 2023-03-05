@@ -37,7 +37,7 @@ public class ObraService {
     private ModelMapper mapper;
 
     public List<ObraDTO> getObras(int pageSize, int pageIndex, ObraFilter filter) throws NoResultException {
-        return obraRepository.getObras(filter.getTipoZona().ordinal(), filter.getCodigoResponsavel(), pageIndex , pageSize)
+        return obraRepository.getObras(filter.getTipoZona() != null ? filter.getTipoZona().ordinal() : null, filter.getCodigoResponsavel(), pageIndex , pageSize)
                     .orElseThrow(NoResultException::new)
                         .stream()
                             .map(o -> mapper.map(o, ObraDTO.class))
