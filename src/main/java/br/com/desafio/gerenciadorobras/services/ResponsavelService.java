@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
 
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.entities.Responsavel;
 import br.com.desafio.gerenciadorobras.repositories.ResponsavelRepository;
 import jakarta.persistence.NoResultException;
 
+@Service
 public class ResponsavelService {
     
     @Autowired

@@ -13,9 +13,9 @@ import br.com.desafio.gerenciadorobras.entities.Responsavel;
 @Repository
 public interface ResponsavelRepository extends JpaRepository<Responsavel, Long> {
 
-        @Query(value = "SELECT * FROM responsaveis      "
-                     + "LIMIT :pageSize                 "
-                     + "OFFSET (:pageSize * :pageIndex) "
+        @Query(value = "SELECT * FROM responsaveis                      "
+                     + "LIMIT :pageSize                                 "
+                     + "OFFSET (:pageSize * :pageIndex)                 "
         ,nativeQuery = true
     )
     Optional<List<Responsavel>> getResponsaveis(@Param("pageIndex") int pageIndex,

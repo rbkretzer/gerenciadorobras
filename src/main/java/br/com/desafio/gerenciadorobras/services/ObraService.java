@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.desafio.gerenciadorobras.dtos.ObraDTO;
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
@@ -20,6 +21,7 @@ import br.com.desafio.gerenciadorobras.repositories.ObraResponsavelRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.ValidationException;
 
+@Service
 public class ObraService {
 
     @Autowired

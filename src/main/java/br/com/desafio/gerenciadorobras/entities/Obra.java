@@ -44,7 +44,7 @@ public class Obra {
     @Column(name = "dt_inicio")
     private LocalDate dataInicio;
     
-    @Column(name = "dt_inicio")
+    @Column(name = "dt_fim")
     private LocalDate dataFim;
 
     @Column(name = "vl_area_total", precision = 12, scale = 2)
