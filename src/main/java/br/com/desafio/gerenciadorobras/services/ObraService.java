@@ -20,6 +20,7 @@ import br.com.desafio.gerenciadorobras.filters.ObraFilter;
 import br.com.desafio.gerenciadorobras.repositories.ObraRepository;
 import br.com.desafio.gerenciadorobras.repositories.ObraResponsavelRepository;
 import jakarta.persistence.NoResultException;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 
 @Service

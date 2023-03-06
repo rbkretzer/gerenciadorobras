@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.services.ResponsavelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/responsavel")
+@Tag(name = "Responsável API", description = "End points habilitados para realizar operações relacionadas aos responsáveis")
 public class ResponsavelController {
     
     @Autowired
