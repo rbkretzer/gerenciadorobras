@@ -40,10 +40,14 @@ public class ResponsavelService {
             findOrThrow(responsavelDTO.getId());
         }
         responsavelRepository.findByCpf(responsavelDTO.getCpf()).ifPresent(r -> {
-            throw new DuplicateKeyException(String.format("CPF já cadastrado para o responsável %s", r.getNome()));
+            if (!r.isMesmoResponsavel(r.getId())) {
+                throw new DuplicateKeyException(String.format("CPF já cadastrado para o responsável %s", r.getNome()));
+            }
         });
         responsavelRepository.findByCodigo(responsavelDTO.getCodigo()).ifPresent(r -> {
-            throw new DuplicateKeyException(String.format("Código já cadastrado para o responsável %s", r.getNome()));
+            if (!r.isMesmoResponsavel(r.getId())) {
+                throw new DuplicateKeyException(String.format("Código já cadastrado para o responsável %s", r.getNome()));
+            }
         });
     }
 

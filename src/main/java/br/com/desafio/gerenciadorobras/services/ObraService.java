@@ -115,7 +115,7 @@ public class ObraService {
     }
 
     private void validaNumeracaoRepetida(Long numero, TipoObra tipo) {
-        obraRepository.findByNumeroTipoObra(numero, tipo).ifPresent(o -> {
+        obraRepository.findByNumeroTipoObra(numero, tipo.ordinal()).ifPresent(o -> {
             throw new DuplicateKeyException(String.format("Número já cadastrado para uma obra %s", TipoObra.PRIVADA.equals(tipo) ? "privada" : "pública"));
         });
     }

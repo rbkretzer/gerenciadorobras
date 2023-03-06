@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.persistence.NoResultException;
+import jakarta.validation.ValidationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler  {
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler  {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
         return errorResponse;
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleValidationException(ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)

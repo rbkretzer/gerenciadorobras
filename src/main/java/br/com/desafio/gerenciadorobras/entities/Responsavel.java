@@ -30,4 +30,8 @@ public class Responsavel {
     @Column(name = "nm_responsavel", length = 100)
     private String nome;
 
+    public boolean isMesmoResponsavel(Long otherId) {
+        return this.id.equals(otherId);
+    }
+
 }

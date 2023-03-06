@@ -32,12 +32,12 @@ public interface ObraRepository extends JpaRepository<Obra, Long> {
                                   @Param("pageSize") int pageSize
     );
 
-    @Query(value = "SELECT * FROM obras                                                         "
-                 + "WHERE tipo_obra = CAST(CAST(:tipoObra AS TEXT) AS TINYINT)                  "
-                 + "    AND num_obra = CAST(CAST(:numero AS TEXT), AS INTEGER)                  "
+    @Query(value = "SELECT * FROM obras                                                                     "
+                 + "WHERE tp_obra = CAST(CAST(:tipoObra AS CHARACTER VARYING) AS TINYINT)                   "
+                 + "    AND num_obra = CAST(CAST(:numero AS CHARACTER VARYING) AS INTEGER)                  "
         ,nativeQuery = true
     )
     Optional<Obra> findByNumeroTipoObra(@Param("numero") Long numero,
-                                        @Param("tipoObra") TipoObra tipo
+                                        @Param("tipoObra") Integer tipoObra
     );
 }
