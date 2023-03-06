@@ -14,16 +14,16 @@ import br.com.desafio.gerenciadorobras.enumerators.TipoObra;
 @Repository
 public interface ObraRepository extends JpaRepository<Obra, Long> {
     
-    @Query(value = "SELECT o.* FROM obras o                                                                                 "
-                 + "    INNER JOIN obra_responsaveis or                                                                     "
-                 + "        ON or.id_obra = or.id_obra                                                                      "
-                 + "    INNER JOIN responsavei r                                                                            "
-                 + "        ON r.id_responsavel = or.id_responsavel                                                         "
-                 + "WHERE o.tipo_obra = COALESCE(CAST(CAST(:tipoObra AS TEXT) AS TINYINT), o.tipo_obra)                     "
-                 + "    AND r.cd_responsavel = COALESCE(CAST(:codigoResponsavel AS TEXT), r.id_responsavel)                 "
-                 + "ORDER BY o.num_obra ASC                                                                                 "
-                 + "LIMIT :pageSize                                                                                         "
-                 + "OFFSET (:pageSize * :pageIndex)                                                                         "
+    @Query(value = "SELECT o.* FROM obras o                                                                                                "
+                 + "    INNER JOIN obra_responsaveis orep                                                                                  "
+                 + "        ON orep.id_obra = o.id_obra                                                                                    "
+                 + "    INNER JOIN responsaveis r                                                                                          "
+                 + "        ON r.id_responsavel = orep.id_responsavel                                                                      "
+                 + "WHERE o.tp_obra = COALESCE(CAST(CAST(:tipoObra AS CHARACTER VARYING) AS TINYINT), o.tp_obra)                           "
+                 + "    AND r.cd_responsavel = COALESCE(CAST(:codigoResponsavel AS CHARACTER VARYING), r.cd_responsavel)                   "
+                 + "ORDER BY o.num_obra ASC                                                                                                "
+                 + "LIMIT :pageSize                                                                                                        "
+                 + "OFFSET (:pageSize * :pageIndex)                                                                                        "
         ,nativeQuery = true
     )
     Optional<List<Obra>> getObras(@Param("tipoObra") Integer tipoObra,
