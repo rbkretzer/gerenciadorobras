@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.desafio.gerenciadorobras.dtos.ObraDTO;
 import br.com.desafio.gerenciadorobras.filters.ObraFilter;
 import br.com.desafio.gerenciadorobras.services.ObraService;
-import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 
 @RestController

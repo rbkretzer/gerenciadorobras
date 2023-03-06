@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.desafio.gerenciadorobras.enumerators.TipoObra;
 import br.com.desafio.gerenciadorobras.enumerators.TipoZona;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,8 +38,12 @@ public class Obra {
     @Column(name = "ds_obra", nullable = false)
     private String descricao;
 
-    @Enumerated // poderia ser adotado um converter, mas entendo que é preferivel utilizar a ordem natural do enum
-    @Column(name = "tp_zona", columnDefinition = "TINYINT", nullable = false)
+    @Enumerated
+    @Column(name = "tp_obra", columnDefinition = "TINYINT", nullable = false)
+    private TipoObra tipo;
+
+    @Enumerated
+    @Column(name = "tp_zona", columnDefinition = "TINYINT")
     private TipoZona zona;
 
     @Column(name = "dt_inicio")

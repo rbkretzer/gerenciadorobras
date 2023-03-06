@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import br.com.desafio.gerenciadorobras.dtos.ObraDTO;
@@ -37,7 +38,7 @@ public class ObraService {
     private ModelMapper mapper;
 
     public List<ObraDTO> getObras(int pageSize, int pageIndex, ObraFilter filter) throws NoResultException {
-        return obraRepository.getObras(filter.getTipoZona() != null ? filter.getTipoZona().ordinal() : null, filter.getCodigoResponsavel(), pageIndex , pageSize)
+        return obraRepository.getObras(filter.getTipoObra() != null ? filter.getTipoObra().ordinal() : null, filter.getCodigoResponsavel(), pageIndex , pageSize)
                     .orElseThrow(NoResultException::new)
                         .stream()
                             .map(o -> mapper.map(o, ObraDTO.class))
@@ -91,6 +92,7 @@ public class ObraService {
     }
 
     private void validateObraPrivada(ObraDTO obraDTO) throws ValidationException {
+        validaNumeracaoRepetida(obraDTO.getNumero(), TipoObra.PRIVADA);
         if (obraDTO.getZona() == null) {
             throw new ValidationException("Campo zona é obrigatório para obras privadas");
         }
@@ -100,6 +102,7 @@ public class ObraService {
     }
 
     private void validateObraPublica(ObraDTO obraDTO) throws ValidationException {
+        validaNumeracaoRepetida(obraDTO.getNumero(), TipoObra.PUBLICA);
         if (obraDTO.getDataInicio() == null) {
             throw new ValidationException("Campo dataInicio é obrigatório para obras públicas");
         }
@@ -109,6 +112,12 @@ public class ObraService {
         if (obraDTO.getDataInicio().isAfter(obraDTO.getDataFim())) {
             throw new ValidationException("Campo dataInicio deve ser menor ou igual a dataFim");
         }
+    }
+
+    private void validaNumeracaoRepetida(Long numero, TipoObra tipo) {
+        obraRepository.findByNumeroTipoObra(numero, tipo).ifPresent(o -> {
+            throw new DuplicateKeyException(String.format("Número já cadastrado para uma obra %s", TipoObra.PRIVADA.equals(tipo) ? "privada" : "pública"));
+        });
     }
 
     public ObraDTO getObra(Long obraId) throws NoResultException  {
