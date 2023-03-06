@@ -20,8 +20,8 @@ public interface ObraResponsavelRepository extends JpaRepository<ObraResponsavel
     Optional<ObraResponsavel> findByResponsavel(Responsavel map);
 
     @Query(value = "SELECT * FROM obra_responsaveis                                                         "
-                 + "WHERE id_obra = CAST(CAST(:idObra AS TEXT) AS INTEGER)                                  "
-                 + "    AND id_responsavel = CAST(CAST(:idResponsavel AS TEXT) AS INTEGER)                  "
+                 + "WHERE id_obra = CAST(CAST(:idObra AS TEXT) AS BIGINT)                                   "
+                 + "    AND id_responsavel = CAST(CAST(:idResponsavel AS TEXT) AS BIGINT)                   "
         ,nativeQuery = true
     )
     Optional<ObraResponsavel> findByObraResponsavel(@Param("idObra") Long idObra,

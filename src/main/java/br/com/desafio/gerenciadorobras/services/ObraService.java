@@ -46,6 +46,10 @@ public class ObraService {
     }
 
     public ObraDTO save(boolean isPublica, ObraDTO obraDTO) throws ValidationException, NoResultException {
+        if (obraDTO.getId() != null) {
+            Obra obra = findOrThrow(obraDTO.getId());
+            obraDTO.setDataCadastro(obra.getDataCadastro());
+        }
         if (isPublica) {
             obraDTO.setTipoObra(TipoObra.PUBLICA);
             validateObraPublica(obraDTO);
@@ -81,7 +85,7 @@ public class ObraService {
         for (ResponsavelDTO r : responsaveis) {
             Responsavel responsavel = responsavelService.findOrThrow(r.getId());
             Optional<ObraResponsavel> optOr = obraResponsavelRepository.findByObraResponsavel(obra.getId(), responsavel.getId());
-            responsaveisObra.add(mapper.map(r, ResponsavelDTO.class));
+            responsaveisObra.add(mapper.map(responsavel, ResponsavelDTO.class));
             if (optOr.isPresent()) {
                 continue;
             }
@@ -92,7 +96,7 @@ public class ObraService {
     }
 
     private void validateObraPrivada(ObraDTO obraDTO) throws ValidationException {
-        validaNumeracaoRepetida(obraDTO.getNumero(), TipoObra.PRIVADA);
+        validaNumeracaoRepetida(obraDTO, TipoObra.PRIVADA);
         if (obraDTO.getZona() == null) {
             throw new ValidationException("Campo zona é obrigatório para obras privadas");
         }
@@ -102,7 +106,7 @@ public class ObraService {
     }
 
     private void validateObraPublica(ObraDTO obraDTO) throws ValidationException {
-        validaNumeracaoRepetida(obraDTO.getNumero(), TipoObra.PUBLICA);
+        validaNumeracaoRepetida(obraDTO, TipoObra.PUBLICA);
         if (obraDTO.getDataInicio() == null) {
             throw new ValidationException("Campo dataInicio é obrigatório para obras públicas");
         }
@@ -114,17 +118,23 @@ public class ObraService {
         }
     }
 
-    private void validaNumeracaoRepetida(Long numero, TipoObra tipo) {
-        obraRepository.findByNumeroTipoObra(numero, tipo.ordinal()).ifPresent(o -> {
-            throw new DuplicateKeyException(String.format("Número já cadastrado para uma obra %s", TipoObra.PRIVADA.equals(tipo) ? "privada" : "pública"));
+    private void validaNumeracaoRepetida(ObraDTO obraDTO, TipoObra tipo) {
+        obraRepository.findByNumeroTipoObra(obraDTO.getNumero(), tipo.ordinal()).ifPresent(o -> {
+            if (!o.isMesmaObra(obraDTO.getId())) {
+                throw new DuplicateKeyException(String.format("Número já cadastrado para uma obra %s", TipoObra.PRIVADA.equals(tipo) ? "privada" : "pública"));
+            }
         });
     }
 
     public ObraDTO getObra(Long obraId) throws NoResultException  {
-        Obra obra = obraRepository.findById(obraId).orElseThrow(NoResultException::new);
+        Obra obra = findOrThrow(obraId);
         ObraDTO obraDTO = mapper.map(obra, ObraDTO.class);
         obraResponsavelRepository.findByObra(obra).ifPresent(l -> tranformResponsaveis(obraDTO, l));
         return obraDTO;
+    }
+
+    private Obra findOrThrow(Long obraId) {
+        return obraRepository.findById(obraId).orElseThrow(() -> new NoResultException(String.format("Obra com o id %s não encontrada", obraId)));
     }
 
     private void tranformResponsaveis(ObraDTO obraDTO, List<ObraResponsavel> l) {

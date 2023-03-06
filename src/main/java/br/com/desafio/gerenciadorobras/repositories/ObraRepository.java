@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.desafio.gerenciadorobras.entities.Obra;
-import br.com.desafio.gerenciadorobras.enumerators.TipoObra;
 
 @Repository
 public interface ObraRepository extends JpaRepository<Obra, Long> {
@@ -34,7 +33,7 @@ public interface ObraRepository extends JpaRepository<Obra, Long> {
 
     @Query(value = "SELECT * FROM obras                                                                     "
                  + "WHERE tp_obra = CAST(CAST(:tipoObra AS CHARACTER VARYING) AS TINYINT)                   "
-                 + "    AND num_obra = CAST(CAST(:numero AS CHARACTER VARYING) AS INTEGER)                  "
+                 + "    AND num_obra = CAST(CAST(:numero AS CHARACTER VARYING) AS BIGINT)                   "
         ,nativeQuery = true
     )
     Optional<Obra> findByNumeroTipoObra(@Param("numero") Long numero,

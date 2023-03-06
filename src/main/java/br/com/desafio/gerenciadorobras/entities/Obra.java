@@ -59,4 +59,8 @@ public class Obra {
     public void createDate() {
         this.dataCadastro = LocalDateTime.now();
     }
+
+    public boolean isMesmaObra(Long otherId) {
+        return this.id.equals(otherId);
+    }
 }
