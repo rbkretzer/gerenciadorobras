@@ -1,5 +1,7 @@
 package br.com.desafio.gerenciadorobras.dtos;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -8,6 +10,7 @@ import lombok.Data;
 @Data
 public class ResponsavelDTO {
 
+    @JsonView({ Views.Privada.class, Views.Publica.class })
     private Long id;
     
     @NotNull(message = "Campo codigo é obrigatório")

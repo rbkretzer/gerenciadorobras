@@ -50,6 +50,7 @@ public class ObraService {
             Obra obra = findOrThrow(obraDTO.getId());
             obraDTO.setDataCadastro(obra.getDataCadastro());
         }
+        validaResponsavelRepetido(obraDTO.getResponsaveis());
         if (isPublica) {
             obraDTO.setTipoObra(TipoObra.PUBLICA);
             validateObraPublica(obraDTO);
@@ -79,7 +80,7 @@ public class ObraService {
             }
         }
     }
-    
+
     private List<ResponsavelDTO> addResponsaveis(List<ResponsavelDTO> responsaveis, Obra obra) throws NoResultException {
         List<ResponsavelDTO> responsaveisObra = new ArrayList<>();
         for (ResponsavelDTO r : responsaveis) {
@@ -93,6 +94,13 @@ public class ObraService {
 
         }
         return responsaveisObra;
+    }
+
+    private void validaResponsavelRepetido(List<ResponsavelDTO> responsaveis) {
+        responsaveis.stream().collect(Collectors.groupingBy(ResponsavelDTO::getId)).entrySet().stream()
+                .filter(b -> b.getValue().size() > 1).findFirst().ifPresent(r -> {
+                    throw new ValidationException(String.format("Responsável com id %s já informado", r.getValue().get(0).getId()));
+                });
     }
 
     private void validateObraPrivada(ObraDTO obraDTO) throws ValidationException {
@@ -126,7 +134,7 @@ public class ObraService {
         });
     }
 
-    public ObraDTO getObra(Long obraId) throws NoResultException  {
+    public ObraDTO getObra(Long obraId) throws NoResultException {
         Obra obra = findOrThrow(obraId);
         ObraDTO obraDTO = mapper.map(obra, ObraDTO.class);
         obraResponsavelRepository.findByObra(obra).ifPresent(l -> tranformResponsaveis(obraDTO, l));

@@ -13,7 +13,7 @@ import br.com.desafio.gerenciadorobras.entities.Obra;
 @Repository
 public interface ObraRepository extends JpaRepository<Obra, Long> {
     
-    @Query(value = "SELECT o.* FROM obras o                                                                                                "
+    @Query(value = "SELECT DISTINCT o.* FROM obras o                                                                                       "
                  + "    INNER JOIN obra_responsaveis orep                                                                                  "
                  + "        ON orep.id_obra = o.id_obra                                                                                    "
                  + "    INNER JOIN responsaveis r                                                                                          "

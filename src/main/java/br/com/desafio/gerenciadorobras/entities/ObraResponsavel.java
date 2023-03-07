@@ -26,11 +26,11 @@ public class ObraResponsavel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name= "id_obra", nullable = false)
     private Obra obra;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_responsavel", nullable = false)
     private Responsavel responsavel;
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.gerenciadorobras.dtos.ResponsavelDTO;
 import br.com.desafio.gerenciadorobras.services.ResponsavelService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -26,6 +27,7 @@ public class ResponsavelController {
     private ResponsavelService responsavelService;
 
     @GetMapping
+    @Operation(summary = "Listar responáveis", description = "Consulta que retorna todas os responsáveis cadastrados")
     public ResponseEntity<?> getResponsaveis(
             @RequestParam(name = "page_size", defaultValue = "10", required = false) int pageSize, 
             @RequestParam(name = "page_index", defaultValue = "0", required = false) int pageIndex) {
@@ -33,16 +35,19 @@ public class ResponsavelController {
     }
 
     @PostMapping
+    @Operation(summary = "Cadastrar responsável", description = "Têm o objetivo de salvar um responsável. Se enviado o id, o respectivo responsável com o id será atualizada com as informações enviadas")
     public ResponseEntity<?> saveResponsavel(@RequestBody @Valid ResponsavelDTO responsavelDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(responsavelService.save(responsavelDTO));
     }
     
     @GetMapping("{responsavelId}")
+    @Operation(summary = "Consultar um responável", description = "Consulta que retorna todos os dados referente ao responsável informado")
     public ResponseEntity<?> getResponsavel(@PathVariable("responsavelId") Long responsavelId) {
         return ResponseEntity.ok(responsavelService.getResponsavel(responsavelId));
     }
     
     @DeleteMapping("{responsavelId}")
+    @Operation(summary = "Excluir um responável", description = "Remover o responsável informado do sistema")
     public ResponseEntity<?> deleteResponsavel(@PathVariable("responsavelId") Long responsavelId) {
         return ResponseEntity.ok(responsavelService.deleteResponsavel(responsavelId));
     }
